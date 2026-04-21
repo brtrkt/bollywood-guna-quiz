@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which Guna Are You? Find Your Goddess — Sanatan Dharma</title>
+<meta name="description" content="Your favorite Bollywood singer reveals your Guna. Tamas, Rajas or Sattva — and the goddess who is yours. A Sanatan Dharma frequency quiz.">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #faf9f7; color: #1a1a1a; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 2rem 1rem; }
+.container { width: 100%; max-width: 600px; }
+.header { text-align: center; margin-bottom: 2rem; }
+.header h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+.header p { font-size: 14px; color: #666; line-height: 1.5; }
+.step { display: none; }
+.step.active { display: block; }
+.q-label { font-size: 11px; color: #999; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+.q-text { font-size: 18px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px; line-height: 1.4; }
+.q-sub { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
+.singers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 1.5rem; }
+.singer-btn { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 14px 12px; cursor: pointer; text-align: center; transition: all 0.15s; }
+.singer-btn:hover { border-color: #bbb; transform: translateY(-1px); }
+.singer-btn.sel-T { background: #EEEDFE; border-color: #534AB7; }
+.singer-btn.sel-R { background: #FAEEDA; border-color: #854F0B; }
+.singer-btn.sel-S { background: #E1F5EE; border-color: #0F6E56; }
+.s-name { font-size: 14px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+.s-sig { font-size: 11px; color: #888; font-style: italic; line-height: 1.3; }
+.confirm-box { background: #fff; border: 1px solid #e5e5e5; border-radius: 16px; padding: 1.25rem; margin-top: 1rem; }
+.songs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+.song-btn { background: #faf9f7; border: 1px solid #e5e5e5; border-radius: 8px; padding: 10px 12px; font-size: 13px; color: #555; cursor: pointer; text-align: left; line-height: 1.4; transition: all 0.15s; }
+.song-btn:hover { border-color: #bbb; color: #1a1a1a; }
+.song-btn.conf-T { border-color: #534AB7; color: #3C3489; background: #EEEDFE; }
+.song-btn.conf-R { border-color: #854F0B; color: #633806; background: #FAEEDA; }
+.song-btn.conf-S { border-color: #0F6E56; color: #085041; background: #E1F5EE; }
+.options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+.option-btn { background: #fff; border: 1px solid #e5e5e5; border-radius: 12px; padding: 14px 16px; cursor: pointer; text-align: left; font-size: 14px; color: #444; line-height: 1.5; transition: all 0.15s; }
+.option-btn:hover { border-color: #bbb; color: #1a1a1a; }
+.option-btn.sel-T { background: #EEEDFE; border-color: #534AB7; color: #26215C; }
+.option-btn.sel-R { background: #FAEEDA; border-color: #854F0B; color: #412402; }
+.option-btn.sel-S { background: #E1F5EE; border-color: #0F6E56; color: #04342C; }
+.next-btn { width: 100%; padding: 13px; border-radius: 10px; border: none; background: #1a1a1a; color: #fff; font-size: 15px; font-weight: 500; cursor: pointer; opacity: 0.3; pointer-events: none; transition: opacity 0.2s; }
+.next-btn.ready { opacity: 1; pointer-events: all; }
+.next-btn.ready:hover { background: #333; }
+.progress { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+.prog-dot { height: 4px; flex: 1; background: #e5e5e5; border-radius: 4px; transition: background 0.3s; }
+.prog-dot.done { background: #534AB7; }
+.result-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 16px; padding: 2rem; text-align: center; }
+.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 5px 16px; border-radius: 20px; margin-bottom: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.guna-name { font-size: 32px; font-weight: 700; margin-bottom: 6px; }
+.guna-sub { font-size: 14px; color: #666; margin-bottom: 1.25rem; line-height: 1.5; }
+.divider { border: none; border-top: 1px solid #f0f0f0; margin: 1.25rem 0; }
+.deity-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.deity-name { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+.insight { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 12px; }
+.peetha-note { font-size: 12px; color: #999; font-style: italic; margin-bottom: 1.5rem; line-height: 1.5; }
+.score-note { font-size: 12px; color: #aaa; margin-bottom: 1.25rem; }
+.retake { font-size: 13px; padding: 9px 24px; border-radius: 8px; border: 1px solid #ddd; background: transparent; color: #555; cursor: pointer; }
+.retake:hover { background: #f5f5f5; }
+.watch-btn { display: inline-block; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 10px; background: #1a1a1a; color: #fff; text-decoration: none; margin-bottom: 12px; transition: background 0.15s; }
+.watch-btn:hover { background: #333; }
+.vrat-days { font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+.vrat-purpose { font-size: 13px; color: #888; margin-bottom: 1rem; font-style: italic; }
+.vrat-btn { display: inline-block; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 10px; background: #7F77DD; color: #fff; text-decoration: none; margin-bottom: 16px; transition: background 0.15s; }
+.vrat-btn:hover { background: #534AB7; }
+.footer { text-align: center; margin-top: 2rem; font-size: 12px; color: #bbb; }
+.footer a { color: #888; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Which Guna Are You?</h1>
+    <p>Your favorite Bollywood singer has been tuning your frequency.<br>Find your Guna. Find your goddess.</p>
+  </div>
+
+  <div class="step active" id="step1">
+    <div class="progress">
+      <div class="prog-dot done"></div>
+      <div class="prog-dot"></div>
+      <div class="prog-dot"></div>
+      <div class="prog-dot"></div>
+    </div>
+    <div class="q-label">Step 1 of 4 — Your singer</div>
+    <div class="q-text">Which singer do you go back to when nobody is watching?</div>
+    <div class="q-sub">Pick the one that hits you deepest.</div>
+    <div class="singers-grid" id="singers-grid"></div>
+  </div>
+
+  <div class="step" id="step2">
+    <div class="progress">
+      <div class="prog-dot done"></div>
+      <div class="prog-dot done"></div>
+      <div class="prog-dot"></div>
+      <div class="prog-dot"></div>
+    </div>
+    <div class="q-label">Step 2 of 4 — Confirm with songs</div>
+    <div class="q-text" id="confirm-heading">Does this feel true?</div>
+    <div class="q-sub">Tap the songs you know in your body — at least 2.</div>
+    <div class="confirm-box">
+      <div class="songs-grid" id="songs-grid"></div>
+      <button class="next-btn" id="songs-next-btn" onclick="goStep3()">Next</button>
+    </div>
+  </div>
+
+  <div class="step" id="step3">
+    <div class="progress">
+      <div class="prog-dot done"></div>
+      <div class="prog-dot done"></div>
+      <div class="prog-dot done"></div>
+      <div class="prog-dot"></div>
+    </div>
+    <div class="q-label">Step 3 of 4 — Your physical body</div>
+    <div class="q-text">How does your body feel most days?</div>
+    <div class="q-sub">Be honest — not how you want to feel, how you actually feel.</div>
+    <div class="options-list">
+      <button class="option-btn" onclick="pickBody('T', this)">Heavy, slow to start — I need time to warm up</button>
+      <button class="option-btn" onclick="pickBody('R', this)">Restless, always moving — hard to sit still</button>
+      <button class="option-btn" onclick="pickBody('S', this)">Light and steady — I feel balanced most days</button>
+    </div>
+    <button class="next-btn" id="body-next-btn" onclick="goStep4()">Next</button>
+  </div>
+
+  <div class="step" id="step4">
+    <div class="progress">
+      <div class="prog-dot done"></div>
+      <div class="prog-dot done"></div>
+      <div class="prog-dot done"></div>
+      <div class="prog-dot done"></div>
+    </div>
+    <div class="q-label">Step 4 of 4 — Your mental body</div>
+    <div class="q-text">When you need to get something done, how do you move?</div>
+    <div class="q-sub">Your natural pattern — not your ideal.</div>
+    <div class="options-list">
+      <button class="option-btn" onclick="pickMind('T', this)">I delay, feel heavy about it, then do it all at once</button>
+      <button class="option-btn" onclick="pickMind('R', this)">I jump in immediately, sometimes without a plan</button>
+      <button class="option-btn" onclick="pickMind('S', this)">I plan first, then move with intention and finish clean</button>
+    </div>
+    <button class="next-btn" id="mind-next-btn" onclick="goResult()">Find my Guna</button>
+  </div>
+
+  <div class="step" id="step-result">
+    <div class="result-card" id="result-inner"></div>
+  </div>
+
+  <div class="footer">A Sanatan Dharma frequency quiz &nbsp;|&nbsp; <a href="https://www.youtube.com/@Sitaram2026-1" target="_blank">Watch on YouTube</a><br><br><em>This is a humble creative attempt to explore the three Gunas through music. The singer classifications are the author's original interpretation — not based on scripture, tradition, or any spiritual authority. This quiz is meant to spark curiosity, not prescribe a path. Please do not make any life decisions based on your result. Take what resonates, leave what doesn't, and always seek guidance from qualified teachers for your spiritual journey.</em></div>
+</div>
+
+<script>
+const singers = [
+  { name: "Arijit Singh", sig: "Tum Hi Ho", guna: "T", songs: ["Channa Mereya", "Agar Tum Saath Ho", "Sajda", "Humari Adhuri Kahani"] },
+  { name: "Kishore Kumar", sig: "O Mere Dil Ke Chain", guna: "T", songs: ["Bheegi Bheegi Raaton Mein", "Aap Ki Aankhon Mein", "Dekha Ek Khwab", "Kora Kagaz"] },
+  { name: "Mukesh", sig: "Kabhi Kabhi", guna: "T", songs: ["Main Pal Do Pal Ka Shayar", "Jeena Yahan Marna Yahan", "Dost Dost Na Raha", "Yeh Mera Deewanapan"] },
+  { name: "Mohammad Rafi", sig: "Likhe Jo Khat Tujhe", guna: "T", songs: ["Khoya Khoya Chand", "Abhi Na Jao Chod Kar", "Kya Hua Tera Vaada", "Main Zindagi Ka Saath"] },
+  { name: "Kumar Sanu", sig: "Akele Hum Akele Tum", guna: "T", songs: ["Aankhon Se Tune", "Kuch Na Kaho", "Sanson Ki Zarurat Hai Jaise", "Tum Mile Dil Khile"] },
+  { name: "Sonu Nigam", sig: "Kal Ho Na Ho", guna: "T", songs: ["Abhi Mujh Mein Kahin", "Sandese Aate Hain", "Tanhayee", "Tere Bin"] },
+  { name: "Sunidhi Chauhan", sig: "Dhoom Machale", guna: "R", songs: ["Desi Girl", "Kamli", "Crazy Kiya Re", "Aaja Nachle"] },
+  { name: "Udit Narayan", sig: "Yeh Bandhan To Pyar Ka Bandhan Hai", guna: "R", songs: ["Papa Kehte Hain", "Mehndi Laga Ke Rakhna", "Tujhe Dekha To Ye Jaana Sanam", "Pehla Nasha"] },
+  { name: "Kavita Krishnamurthy", sig: "Khal Nayak Hoon Main", guna: "R", songs: ["Nimbooda", "Albela Sajan", "Bole Choodiyan", "Tu Cheez Badi Hai Mast"] },
+  { name: "Lata Mangeshkar", sig: "Lag Jaa Gale", guna: "S", songs: ["Ajeeb Dastan Hai Yeh", "Allah Tero Naam", "Aaya Tere Dar Par", "Luka Chhupi"] },
+  { name: "Sadhana Sargam", sig: "Pehla Nasha", guna: "S", songs: ["Chupke Se", "Jab Koi Baat Bigad Jaye", "Na Kajre Ki Dhar", "Saat Samundar Paar"] },
+  { name: "Shreya Ghoshal", sig: "Noor E Khuda", guna: "S", songs: ["Tujh Mein Rab Dikhta Hai", "Bairi Piya", "Silsila Ye Chahat Ka", "Hasi"] },
+  { name: "Anuradha Paudwal", sig: "Om Jai Jagdish Hare", guna: "S", songs: ["Jai Shiv Omkara", "Tu Meri Zindagi Hai", "Dheere Dheere Se Meri Zindagi Mein Aana", "Dil Hai Ki Manta Nahin"] },
+  { name: "Kailash Kher", sig: "Teri Deewani", guna: "S", songs: ["Allah Ke Bande", "Arziyan", "Saiyyan", "Ya Rabba"] },
+  { name: "K S Chitra", sig: "Yeh Haseen Vadiyan", guna: "S", songs: ["Pyar Tune Kya Kiya", "Hum Tumse Na", "Yaaron Sun Lo", "Payale Chunmun"] },
+
+  { name: "Rahat Fateh Ali Khan", sig: "Tere Mast Mast Do Nain", guna: "T", songs: ["O Re Piya", "Bol Na Halke Halke", "Jiya Dhadak Dhadak Jaye", "Tum Jo Aaye"] },
+  { name: "Alka Yagnik", sig: "Ek Do Teen", guna: "R", songs: ["Choli Ke Peeche Kya Hai", "Taal Se Taal Mila", "Chamma Chamma", "Kuch Kuch Hota Hai"] },
+  { name: "Asha Bhosle", sig: "Piya Tu Ab To Aaja", guna: "R", songs: ["Dum Maro Dum", "Rangeela Re", "Chura Liya Hai Tumne", "Tanha Tanha"] },
+  { name: "Shaan", sig: "Tanha Dil", guna: "R", songs: ["Koi Kahe Kehta Rahe", "Chand Sifarish", "Where's The Party Tonight", "Bum Bum Bole"] },
+  { name: "Daler Mehndi", sig: "Bolo Ta Ra Ra", guna: "R", songs: ["Tunak Tunak Tun", "Balle Balle", "Na Na Na Re", "Rang De Basanti"] },
+  { name: "A R Rahman", sig: "Chaiyya Chaiyya", guna: "S", songs: ["Dil Se Re", "Roobaroo", "Khwaja Mere Khwaja", "Tere Bina"] }
+];
+
+const results = {
+  T: { name: "Tamas", color: "#26215C", badgeBg: "#EEEDFE", badgeColor: "#3C3489", sub: "You feel everything deeply before you move. Depth is your nature.", deity: "Ma Kali", insight: "Tamas is not darkness — it is depth. You are drawn to voices that ache because you carry that ache too. You feel before you understand. Ma Kali is your goddess. She doesn't comfort. She transforms what no longer serves you.", peetha: "Your Shakti Peethas — Kalighat, Tarapith, Jwalamukhi", video: "https://youtube.com/shorts/EICYVYPkDdc?feature=share", vrat: "Amavasya, Kali Puja, Shani Vrat", vratPurpose: "Release, transformation, dissolving what no longer serves you" },
+  R: { name: "Rajas", color: "#412402", badgeBg: "#FAEEDA", badgeColor: "#633806", sub: "You are fire. Built to move, to build, to break through.", deity: "Ma Durga", insight: "Rajas is not restlessness — it is life force. You are drawn to voices that celebrate because you are built to move forward. Ma Durga is your goddess. She rides a lion because she does not wait for permission. Neither do you.", peetha: "Your Shakti Peethas — Ambaji, Kamakhya, Vindhyavasini", video: "https://youtube.com/shorts/DS55bJUQmBk?feature=share", vrat: "Navratri, Durga Ashtami, Mangal Vrat", vratPurpose: "Activation, courage, breaking through obstacles" },
+  S: { name: "Sattva", color: "#04342C", badgeBg: "#E1F5EE", badgeColor: "#085041", sub: "You are drawn to clarity, stillness, and what is eternally true.", deity: "Ma Saraswati", insight: "Sattva is not passivity — it is pure perception. You are drawn to voices that feel like prayer because you yourself are tuned to that frequency. Ma Saraswati is your goddess. She does not chase. She illuminates.", peetha: "Your Shakti Peethas — Sharda Peeth, Vajreshwari, Chintapurni", video: "https://youtube.com/shorts/Ne8L_oflwno?feature=share", vrat: "Ekadashi, Saraswati Puja, Guruvar Vrat", vratPurpose: "Clarity, purification, wisdom" }
+};
+
+let singerGuna = null, bodyGuna = null, mindGuna = null, confirmedCount = 0;
+
+function init() {
+  document.getElementById('singers-grid').innerHTML = singers.map((s, i) =>
+    `<div class="singer-btn" id="sb-${i}" onclick="pickSinger(${i})">
+      <div class="s-name">${s.name}</div>
+      <div class="s-sig">${s.sig}</div>
+    </div>`
+  ).join('');
+}
+
+function pickSinger(idx) {
+  singerGuna = singers[idx].guna; confirmedCount = 0;
+  document.querySelectorAll('.singer-btn').forEach(b => b.className = 'singer-btn');
+  document.getElementById('sb-' + idx).classList.add('sel-' + singerGuna);
+  setTimeout(() => {
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    document.getElementById('confirm-heading').textContent = singers[idx].name + ' — does this feel true?';
+    document.getElementById('songs-grid').innerHTML = singers[idx].songs.map(s =>
+      `<button class="song-btn" onclick="confirmSong(this)">${s}</button>`
+    ).join('');
+    document.getElementById('songs-next-btn').classList.remove('ready');
+  }, 250);
+}
+
+function confirmSong(el) {
+  el.classList.toggle('conf-' + singerGuna);
+  confirmedCount = document.querySelectorAll('[class*="conf-"]').length;
+  document.getElementById('songs-next-btn').classList.toggle('ready', confirmedCount >= 2);
+}
+
+function goStep3() {
+  document.getElementById('step2').classList.remove('active');
+  document.getElementById('step3').classList.add('active');
+}
+
+function pickBody(guna, el) {
+  bodyGuna = guna;
+  document.querySelectorAll('#step3 .option-btn').forEach(b => b.className = 'option-btn');
+  el.classList.add('sel-' + guna);
+  document.getElementById('body-next-btn').classList.add('ready');
+}
+
+function goStep4() {
+  document.getElementById('step3').classList.remove('active');
+  document.getElementById('step4').classList.add('active');
+}
+
+function pickMind(guna, el) {
+  mindGuna = guna;
+  document.querySelectorAll('#step4 .option-btn').forEach(b => b.className = 'option-btn');
+  el.classList.add('sel-' + guna);
+  document.getElementById('mind-next-btn').classList.add('ready');
+}
+
+function goResult() {
+  const counts = { T: 0, R: 0, S: 0 };
+  [singerGuna, bodyGuna, mindGuna].forEach(g => { if (g) counts[g]++; });
+  const dominant = Object.keys(counts).reduce((a, b) => counts[a] >= counts[b] ? a : b);
+  const matched = counts[dominant];
+
+  document.getElementById('step4').classList.remove('active');
+  document.getElementById('step-result').classList.add('active');
+  const r = results[dominant];
+  document.getElementById('result-inner').innerHTML = `
+    <div class="badge" style="background:${r.badgeBg}; color:${r.badgeColor};">Your Guna</div>
+    <div class="guna-name" style="color:${r.color};">${r.name}</div>
+    <div class="guna-sub">${r.sub}</div>
+    <div class="score-note">${matched} out of 3 signals aligned</div>
+    <hr class="divider">
+    <div class="deity-label">Your deity within</div>
+    <div class="deity-name">${r.deity}</div>
+    <div class="insight">${r.insight}</div>
+    <div class="peetha-note">${r.peetha}</div>
+    <hr class="divider">
+    <div class="deity-label">Your Vrat practice</div>
+    <div class="vrat-days">${r.vrat}</div>
+    <div class="vrat-purpose">${r.vratPurpose}</div>
+    <a class="vrat-btn" href="https://vrat-app.netlify.app" target="_blank">Begin your Vrat practice &rarr;</a>
+    <a class="watch-btn" href="${r.video}" target="_blank">Watch your Shakti Peethas →</a><br><br><button class="retake" onclick="restart()">Retake</button>
+  `;
+}
+
+function restart() {
+  singerGuna = null; bodyGuna = null; mindGuna = null; confirmedCount = 0;
+  document.getElementById('step-result').classList.remove('active');
+  ['step2','step3','step4'].forEach(s => document.getElementById(s).classList.remove('active'));
+  document.getElementById('step1').classList.add('active');
+  init();
+}
+
+init();
+</script>
+</body>
+</html>
